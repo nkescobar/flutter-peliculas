@@ -1,30 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_peliculas/src/models/pelicula_model.dart';
 
-class MovieHorizontalWidget extends StatelessWidget {
-  final List<Pelicula> peliculas;
-
-  const MovieHorizontalWidget({
-    Key key,
-    @required this.peliculas,
-  }) : super(key: key);
+class CardMovieHorizontal extends StatelessWidget {
+  final Pelicula pelicula;
+  const CardMovieHorizontal({Key key, @required this.pelicula})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final _screen = MediaQuery.of(context);
-    return Container(
-      height: _screen.size.height * 0.2,
-      child: PageView(
-        pageSnapping: false,
-        controller: PageController(initialPage: 1, viewportFraction: 0.3),
-        children: _tarjetas(context),
-      ),
-    );
-  }
-
-  List<Widget> _tarjetas(BuildContext context) {
-    return peliculas.map((pelicula) {
-      return Container(
+    return GestureDetector(
+      onTap: () {
+        print('Pelicula titulo ${pelicula.title}');
+        Navigator.pushNamed(context, 'detalle', arguments: pelicula);
+      },
+      child: Container(
         margin: EdgeInsets.only(right: 15.0),
         child: Column(
           children: [
@@ -45,7 +34,7 @@ class MovieHorizontalWidget extends StatelessWidget {
             )
           ],
         ),
-      );
-    }).toList();
+      ),
+    );
   }
 }

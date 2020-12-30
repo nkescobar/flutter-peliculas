@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_peliculas/src/providers/peliculas_provider.dart';
-import 'package:flutter_peliculas/src/widgets/movie_horizontar.dart';
+import 'package:flutter_peliculas/src/widgets/movie_horizontal.dart';
 
 class FooterWidget extends StatelessWidget {
   final PeliculasProvider peliculasProvider;
@@ -33,6 +33,7 @@ class FooterWidget extends StatelessWidget {
                 snapshot.data?.forEach((p) => print(p.title));
                 return MovieHorizontalWidget(
                   peliculas: snapshot.data,
+                  siguientePagina: peliculasProvider.getPopulares,
                 );
               } else {
                 return Container(

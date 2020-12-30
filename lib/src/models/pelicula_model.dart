@@ -65,8 +65,15 @@ class Pelicula {
 
   getPosterImg() {
     if (posterPath == null) {
-      return null;
+      return 'http://forum.spaceengine.org/styles/se/theme/images/no_avatar.jpg';
     }
     return 'https://image.tmdb.org/t/p/w500/$posterPath';
+  }
+
+  getBackgroundImg() {
+    if (backdropPath == null) {
+      return 'http://forum.spaceengine.org/styles/se/theme/images/no_avatar.jpg';
+    }
+    return 'https://image.tmdb.org/t/p/w500/$backdropPath';
   }
 }
