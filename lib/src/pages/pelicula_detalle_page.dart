@@ -1,8 +1,56 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_peliculas/src/models/actores_model.dart';
 import 'package:flutter_peliculas/src/models/pelicula_model.dart';
+import 'package:flutter_peliculas/src/providers/peliculas_provider.dart';
 
-class PeliculaDetallePage extends StatelessWidget {
-  const PeliculaDetallePage({
+class PeliculaDetallePage extends StatefulWidget {
+  PeliculaDetallePage({Key key}) : super(key: key);
+
+  @override
+  _PeliculaDetallePageState createState() => _PeliculaDetallePageState();
+}
+
+class _PeliculaDetallePageState extends State<PeliculaDetallePage> {
+  PeliculasProvider _peliculasProvider = new PeliculasProvider();
+
+  @override
+  Widget build(BuildContext context) {
+    final Pelicula pelicula = ModalRoute.of(context).settings.arguments;
+
+    return Scaffold(
+      /*appBar: AppBar(
+        title: Text('${pelicula.title}'),
+      ),*/
+      body: CustomScrollView(
+        slivers: [
+          SliverAppBarWidget(pelicula: pelicula),
+          SliverList(
+            delegate: SliverChildListDelegate([
+              SizedBox(
+                height: 10.0,
+              ),
+              PosterTituloWidget(
+                pelicula: pelicula,
+              ),
+              DescripcionWidget(
+                pelicula: pelicula,
+              ),
+              CrearCastingWidget(
+                peliculasProvider: _peliculasProvider,
+                pelicula: pelicula,
+              ),
+            ]),
+          )
+        ],
+      ),
+    );
+  }
+}
+
+class PeliculaDetallePageOtro extends StatelessWidget {
+  PeliculasProvider _peliculasProvider = new PeliculasProvider();
+
+  PeliculaDetallePageOtro({
     Key key,
   }) : super(key: key);
 
@@ -28,6 +76,10 @@ class PeliculaDetallePage extends StatelessWidget {
               DescripcionWidget(
                 pelicula: pelicula,
               ),
+              CrearCastingWidget(
+                pelicula: pelicula,
+                peliculasProvider: _peliculasProvider,
+              )
             ]),
           )
         ],
@@ -135,6 +187,90 @@ class DescripcionWidget extends StatelessWidget {
       child: Text(
         pelicula.overview,
         textAlign: TextAlign.justify,
+      ),
+    );
+  }
+}
+
+class CrearCastingWidget extends StatelessWidget {
+  final PeliculasProvider peliculasProvider;
+  final Pelicula pelicula;
+
+  const CrearCastingWidget({
+    Key key,
+    @required this.peliculasProvider,
+    @required this.pelicula,
+  }) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder(
+      future: peliculasProvider.getCast(pelicula.id.toString()),
+      builder: (BuildContext context, AsyncSnapshot<List> snapshot) {
+        if (snapshot.hasData) {
+          return CrearActoresPageView(
+            actores: snapshot.data,
+          );
+        } else {
+          return Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+      },
+    );
+  }
+}
+
+class CrearActoresPageView extends StatelessWidget {
+  final List<Actor> actores;
+  const CrearActoresPageView({
+    Key key,
+    @required this.actores,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: 200.0,
+      child: PageView.builder(
+        controller: PageController(initialPage: 1, viewportFraction: 0.3),
+        itemCount: actores.length,
+        itemBuilder: (context, i) {
+          return ActorCardWidget(
+            actor: actores[i],
+          );
+        },
+      ),
+    );
+  }
+}
+
+class ActorCardWidget extends StatelessWidget {
+  final Actor actor;
+  const ActorCardWidget({
+    Key key,
+    @required this.actor,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: Column(
+        children: <Widget>[
+          ClipRRect(
+            borderRadius: BorderRadius.circular(20.0),
+            child: FadeInImage(
+              image: NetworkImage(
+                actor.getFoto(),
+              ),
+              height: 150.0,
+              placeholder: AssetImage('assets/images/not-found.png'),
+            ),
+          ),
+          Text(
+            actor.name,
+            overflow: TextOverflow.ellipsis,
+          ),
+        ],
       ),
     );
   }

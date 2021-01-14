@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_peliculas/src/models/pelicula_model.dart';
 import 'package:flutter_peliculas/src/providers/peliculas_provider.dart';
 import 'package:flutter_peliculas/src/widgets/footer.dart';
 import 'package:flutter_peliculas/src/widgets/swiper-card.dart';

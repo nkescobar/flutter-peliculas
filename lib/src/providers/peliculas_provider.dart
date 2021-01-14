@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:flutter_peliculas/src/models/actores_model.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_peliculas/src/models/pelicula_model.dart';
 
@@ -28,6 +29,7 @@ class PeliculasProvider {
 
   Future<List<Pelicula>> _procesarRespuesta(Uri url) async {
     final respuesta = await http.get(url);
+
     final decodeData = json.decode(respuesta.body);
     final peliculas = new Peliculas.fromJsonList(decodeData['results']);
     return peliculas.items;
@@ -58,5 +60,18 @@ class PeliculasProvider {
 
     //return this._procesarRespuesta(url);
     return resp;
+  }
+
+  Future<List<Actor>> getCast(String peliId) async {
+    final url = Uri.https(_url, '3/movie/$peliId/credits', {
+      'api_key': _apiKey,
+      'language': _language,
+    });
+
+    final resp = await http.get(url);
+
+    final decodeData = json.decode(resp.body);
+    final cast = new Cast.fromJsonList(decodeData['cast']);
+    return cast.actores;
   }
 }
