@@ -33,6 +33,7 @@ class MovieHorizontalWidget extends StatelessWidget {
         controller: _pageController,
         itemCount: peliculas.length,
         itemBuilder: (BuildContext context, index) {
+          peliculas[index].uniqueId = '${peliculas[index].id}-card';
           return CardMovieHorizontal(pelicula: peliculas[index]);
         },
         //children: _tarjetas(context),

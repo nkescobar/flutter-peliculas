@@ -17,13 +17,16 @@ class CardMovieHorizontal extends StatelessWidget {
         margin: EdgeInsets.only(right: 15.0),
         child: Column(
           children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(20.0),
-              child: FadeInImage(
-                placeholder: AssetImage('assets/images/not-found.png'),
-                image: NetworkImage(pelicula.getPosterImg()),
-                fit: BoxFit.fill,
-                height: 140.0,
+            Hero(
+              tag: pelicula.uniqueId,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(20.0),
+                child: FadeInImage(
+                  placeholder: AssetImage('assets/images/not-found.png'),
+                  image: NetworkImage(pelicula.getPosterImg()),
+                  fit: BoxFit.fill,
+                  height: 140.0,
+                ),
               ),
             ),
             SizedBox(),
